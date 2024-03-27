@@ -1,0 +1,89 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-into-roles-table
+      author: Yaroslav Radevych-Vynnytskyi
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: MANAGER
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: CUSTOMER
+  - changeSet:
+      id: insert-user1
+      author: Yaroslav Radevych-Vynnytskyi
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: email
+                  value: gates@email.com
+              - column:
+                  name: password
+                  value: $2a$10$AduObuNZCl3w.z39uaTzSur114EA2y4RsmgoI3xEZySbEcVGw8PpW #megadeth
+              - column:
+                  name: first_name
+                  value: Bill
+              - column:
+                  name: last_name
+                  value: Gates
+  - changeSet:
+      id: insert-user2
+      author: Yaroslav Radevych-Vynnytskyi
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: email
+                  value: dimeBag@email.com
+              - column:
+                  name: password
+                  value: $2a$10$6uh.FMhX4h0X1hlEzP41NOnwT/hImEOjOU6r6.7Gz0jXuHiTA6h2y #fooFighters
+              - column:
+                  name: first_name
+                  value: Dimebag
+              - column:
+                  name: last_name
+                  value: Darell
+  - changeSet:
+      id: insert-into-users_roles
+      author: Yaroslav Radevych-Vynnytskyi
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_id
+                  value: 1
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: role_id
+                  value: 2
