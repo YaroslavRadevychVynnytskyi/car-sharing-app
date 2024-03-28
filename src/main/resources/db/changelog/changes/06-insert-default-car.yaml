@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-default-car
+      author: Yaroslav Radevych-Vynnytskyi
+      changes:
+        - insert:
+            tableName: cars
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: model
+                  value: Lanos
+              - column:
+                  name: brand
+                  value: Daewoo
+              - column:
+                  name: type
+                  value: SEDAN
+              - column:
+                  name: inventory
+                  value: 3
+              - column:
+                  name: daily_fee
+                  value: 18
