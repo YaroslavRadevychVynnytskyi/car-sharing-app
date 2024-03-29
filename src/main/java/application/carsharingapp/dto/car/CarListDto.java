@@ -1,4 +1,4 @@
-package application.carsharingapp.dto.cars;
+package application.carsharingapp.dto.car;
 
 import jakarta.validation.constraints.NotNull;
 

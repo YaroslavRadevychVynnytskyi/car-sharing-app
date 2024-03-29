@@ -4,7 +4,7 @@ import application.carsharingapp.dto.user.UpdateUserRoleRequestDto;
 import application.carsharingapp.dto.user.UserRegistrationRequestDto;
 import application.carsharingapp.dto.user.UserResponseDto;
 import application.carsharingapp.model.User;
-import application.carsharingapp.service.UserService;
+import application.carsharingapp.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

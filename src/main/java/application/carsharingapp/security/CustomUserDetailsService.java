@@ -1,6 +1,6 @@
 package application.carsharingapp.security;
 
-import application.carsharingapp.repository.UserRepository;
+import application.carsharingapp.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

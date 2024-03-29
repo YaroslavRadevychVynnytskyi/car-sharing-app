@@ -6,7 +6,7 @@ import application.carsharingapp.dto.user.UserRegistrationRequestDto;
 import application.carsharingapp.dto.user.UserResponseDto;
 import application.carsharingapp.exception.RegistrationException;
 import application.carsharingapp.security.AuthenticationService;
-import application.carsharingapp.service.UserService;
+import application.carsharingapp.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

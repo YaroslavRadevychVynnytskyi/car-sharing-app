@@ -1,12 +1,12 @@
-package application.carsharingapp.service.impl;
+package application.carsharingapp.service.car.impl;
 
-import application.carsharingapp.dto.cars.CarListDto;
-import application.carsharingapp.dto.cars.GenericCarDto;
+import application.carsharingapp.dto.car.CarListDto;
+import application.carsharingapp.dto.car.GenericCarDto;
 import application.carsharingapp.exception.EntityNotFoundException;
 import application.carsharingapp.mapper.CarMapper;
 import application.carsharingapp.model.Car;
-import application.carsharingapp.repository.CarRepository;
-import application.carsharingapp.service.CarService;
+import application.carsharingapp.repository.car.CarRepository;
+import application.carsharingapp.service.car.CarService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
