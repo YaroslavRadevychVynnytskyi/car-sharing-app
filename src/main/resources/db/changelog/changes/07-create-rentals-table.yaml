@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-rentals-table
+      author: Yaroslav Radevych-Vynnytskyi
+      changes:
+        - createTable:
+            tableName: rentals
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: rental_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: return_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actual_return_date
+                  type: DATE
+              - column:
+                  name: car_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_rentals_cars
+                    references: cars(id)
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_rentals_users
+                    references: users(id)
+                    nullable: false
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

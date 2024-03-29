@@ -1,4 +1,4 @@
-package application.carsharingapp.service;
+package application.carsharingapp.service.user;
 
 import application.carsharingapp.dto.user.UpdateUserRoleRequestDto;
 import application.carsharingapp.dto.user.UserRegistrationRequestDto;

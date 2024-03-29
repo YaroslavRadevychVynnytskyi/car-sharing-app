@@ -1,4 +1,4 @@
-package application.carsharingapp.service.impl;
+package application.carsharingapp.service.user.impl;
 
 import application.carsharingapp.dto.user.UpdateUserRoleRequestDto;
 import application.carsharingapp.dto.user.UserRegistrationRequestDto;
@@ -8,9 +8,9 @@ import application.carsharingapp.exception.RegistrationException;
 import application.carsharingapp.mapper.UserMapper;
 import application.carsharingapp.model.Role;
 import application.carsharingapp.model.User;
-import application.carsharingapp.repository.RoleRepository;
-import application.carsharingapp.repository.UserRepository;
-import application.carsharingapp.service.UserService;
+import application.carsharingapp.repository.role.RoleRepository;
+import application.carsharingapp.repository.user.UserRepository;
+import application.carsharingapp.service.user.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

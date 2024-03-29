@@ -1,7 +1,7 @@
-package application.carsharingapp.service;
+package application.carsharingapp.service.car;
 
-import application.carsharingapp.dto.cars.CarListDto;
-import application.carsharingapp.dto.cars.GenericCarDto;
+import application.carsharingapp.dto.car.CarListDto;
+import application.carsharingapp.dto.car.GenericCarDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 

@@ -1,8 +1,8 @@
 package application.carsharingapp.controller;
 
-import application.carsharingapp.dto.cars.CarListDto;
-import application.carsharingapp.dto.cars.GenericCarDto;
-import application.carsharingapp.service.CarService;
+import application.carsharingapp.dto.car.CarListDto;
+import application.carsharingapp.dto.car.GenericCarDto;
+import application.carsharingapp.service.car.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
