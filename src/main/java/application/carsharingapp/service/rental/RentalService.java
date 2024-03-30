@@ -9,7 +9,9 @@ import java.util.List;
 public interface RentalService {
     RentalResponseDto addRental(Long userId, CreateRentalRequestDto request);
 
-    RentalResponseDto getSpecificRental(Long rentalId);
+    List<RentalResponseDto> getCustomerRentals(Long userId);
+
+    List<RentalResponseDto> getSpecificIdRentals(Long rentalId);
 
     void setActualReturnDate(Long userId, SetActualReturnDateRequestDto request);
 

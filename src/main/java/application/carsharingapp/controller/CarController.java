@@ -5,6 +5,7 @@ import application.carsharingapp.dto.car.GenericCarDto;
 import application.carsharingapp.service.car.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class CarController {
     @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping
     @Operation(summary = "Add a new car", description = "Adds a new car")
-    public GenericCarDto addCar(@RequestBody GenericCarDto requestDto) {
+    public GenericCarDto addCar(@RequestBody @Valid GenericCarDto requestDto) {
         return carService.addCar(requestDto);
     }
 
@@ -49,7 +50,7 @@ public class CarController {
     @PatchMapping("/{id}")
     @Operation(summary = "Update car", description = "Updates a car")
     public GenericCarDto updateCar(@PathVariable Long id,
-                                   @RequestBody GenericCarDto requestDto) {
+                                   @RequestBody @Valid GenericCarDto requestDto) {
         return carService.updateCar(id, requestDto);
 
     }
