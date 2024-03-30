@@ -7,6 +7,7 @@ import application.carsharingapp.model.User;
 import application.carsharingapp.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -46,7 +47,7 @@ public class UserController {
     @Operation(summary = "Update profile info",
             description = "Provides possibility to change some personal data")
     UserResponseDto updateProfileInfo(Authentication authentication,
-                                      @RequestBody UserRegistrationRequestDto requestDto) {
+                                      @RequestBody @Valid UserRegistrationRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
         return userService.updateProfileInfo(user.getId(), requestDto);
     }

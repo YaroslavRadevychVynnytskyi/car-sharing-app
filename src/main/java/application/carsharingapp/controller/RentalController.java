@@ -4,6 +4,7 @@ import application.carsharingapp.dto.rental.CreateRentalRequestDto;
 import application.carsharingapp.dto.rental.RentalResponseDto;
 import application.carsharingapp.dto.rental.RentalSearchParameters;
 import application.carsharingapp.dto.rental.SetActualReturnDateRequestDto;
+import application.carsharingapp.exception.BadRequestException;
 import application.carsharingapp.model.User;
 import application.carsharingapp.service.rental.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,18 +37,28 @@ public class RentalController {
     }
 
     @PreAuthorize("hasRole('ROLE_MANAGER')")
-    @GetMapping("/")
+    @GetMapping("/search/")
     @Operation(summary = "Get active rentals",
             description = "Gets rentals by user ID and whether the rental is still active or not")
     public List<RentalResponseDto> getActiveRentals(RentalSearchParameters searchParameters) {
         return rentalService.searchRentals(searchParameters);
     }
 
-    @PreAuthorize("hasRole('ROLE_MANAGER')")
-    @GetMapping("/{id}")
-    @Operation(summary = "Get rental", description = "Gets specific rental")
-    public RentalResponseDto getRental(@PathVariable Long id) {
-        return rentalService.getSpecificRental(id);
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_CUSTOMER')")
+    @GetMapping(value = {"/{id}", "/"})
+    @Operation(summary = "Get rental", description = "Gets rentals")
+    public List<RentalResponseDto> getRentals(Authentication authentication,
+                                              @PathVariable(required = false) Long id) {
+        User user = (User) authentication.getPrincipal();
+        if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority()
+                .equals("ROLE_MANAGER")) && id != null) {
+            return rentalService.getSpecificIdRentals(id);
+        }
+        if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority()
+                .equals("ROLE_CUSTOMER")) && id == null) {
+            return rentalService.getCustomerRentals(user.getId());
+        }
+        throw new BadRequestException("Bad request");
     }
 
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")

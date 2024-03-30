@@ -1,5 +1,6 @@
 package application.carsharingapp.service.rental.impl;
 
+import application.carsharingapp.controller.RentalReturnException;
 import application.carsharingapp.dto.rental.CreateRentalRequestDto;
 import application.carsharingapp.dto.rental.RentalResponseDto;
 import application.carsharingapp.dto.rental.RentalSearchParameters;
@@ -56,10 +57,18 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public RentalResponseDto getSpecificRental(Long rentalId) {
+    public List<RentalResponseDto> getCustomerRentals(Long userId) {
+        List<Rental> rentals = rentalRepository.findAllByUserId(userId);
+        return rentals.stream()
+                .map(rentalMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<RentalResponseDto> getSpecificIdRentals(Long rentalId) {
         Rental rental = rentalRepository.findById(rentalId).orElseThrow(() ->
                 new EntityNotFoundException("Can't find rental with id: " + rentalId));
-        return rentalMapper.toDto(rental);
+        return List.of(rentalMapper.toDto(rental));
     }
 
     @Override
@@ -67,6 +76,11 @@ public class RentalServiceImpl implements RentalService {
         Rental rental = rentalRepository.findByUserIdAndCarId(userId, request.carId())
                 .orElseThrow(() -> new EntityNotFoundException("Can't find rental "
                         + "with user id: " + userId + " and car id: " + request.carId()));
+
+        if (rental.getActualReturnDate() != null) {
+            throw new RentalReturnException("Rental cannot be returned twice");
+        }
+
         rental.setActualReturnDate(request.actualReturnDate());
 
         Car car = rental.getCar();
