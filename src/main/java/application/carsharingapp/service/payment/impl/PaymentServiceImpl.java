@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,6 @@ public class PaymentServiceImpl implements PaymentService {
     private static final String PRODUCT_NAME = "Car rental";
     private static final String PRODUCT_DESCRIPTION = "Payment for rental of the car";
     private static final String COMPLETE_SESSION_STATUS = "complete";
-    private static final String SUCCESS_URL = "http://localhost:8080/payments/success?rentalId=";
-    private static final String CANCEL_URL = "http://localhost:8080/payments/cancel?rentalId=";
     private static final String CANCEL_URL_MESSAGE = "Payment was cancelled, but it can "
             + "be made later (Session is available for 24 hours)";
 
@@ -50,6 +49,10 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
     private final NotificationService notificationService;
+    @Value("${stripe.success.url}")
+    private String successUrl;
+    @Value("${stripe.cancel.url}")
+    private String cancelUrl;
 
     @Override
     public List<PaymentResponseDto> getPayments(Long userId) {
@@ -180,11 +183,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private String getSuccessUrl(Long rentalId) {
-        return SUCCESS_URL + rentalId;
+        return successUrl + rentalId;
     }
 
     private String getCancelUrl(Long rentalId) {
-        return CANCEL_URL + rentalId;
+        return cancelUrl + rentalId;
     }
 
     private Rental findById(Long rentalId) {
