@@ -6,7 +6,6 @@ import application.carsharingapp.dto.rental.RentalSearchParameters;
 import application.carsharingapp.dto.rental.SetActualReturnDateRequestDto;
 import application.carsharingapp.exception.EntityNotFoundException;
 import application.carsharingapp.exception.NoAvailableCarsException;
-import application.carsharingapp.exception.RentalReturnException;
 import application.carsharingapp.mapper.RentalMapper;
 import application.carsharingapp.model.Car;
 import application.carsharingapp.model.Rental;
@@ -20,11 +19,13 @@ import application.carsharingapp.service.rental.RentalService;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Profile("!test")
 @RequiredArgsConstructor
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -85,13 +86,12 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public void setActualReturnDate(Long userId, SetActualReturnDateRequestDto request) {
-        Rental rental = rentalRepository.findByUserIdAndCarId(userId, request.carId())
-                .orElseThrow(() -> new EntityNotFoundException("Can't find rental "
-                        + "with user id: " + userId + " and car id: " + request.carId()));
-
-        if (rental.getActualReturnDate() != null) {
-            throw new RentalReturnException("Rental cannot be returned twice");
-        }
+        List<Rental> rentals = rentalRepository.findByUserIdAndCarId(userId, request.carId());
+        Rental rental = rentals.stream()
+                .filter(r -> r.getActualReturnDate() == null)
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("Can't find rentals without "
+                        + "actual return date"));
 
         rental.setActualReturnDate(request.actualReturnDate());
 
@@ -120,6 +120,18 @@ public class RentalServiceImpl implements RentalService {
                 new EntityNotFoundException("Can't find car with id: " + carId));
     }
 
+    @Scheduled(cron = "0 0 9 * * *")
+    protected void checkOverdueRentals() {
+        List<Rental> overdueRentals = rentalRepository.findOverdueRentals(LocalDate.now());
+        if (!overdueRentals.isEmpty()) {
+            overdueRentals.forEach(rental -> notificationService
+                    .sendNotification(OVERDUE_RENTAL_MESSAGE
+                            + buildNotificationMessage(rental)));
+        } else {
+            notificationService.sendNotification(NO_OVERDUE_MESSAGE);
+        }
+    }
+
     private String buildNotificationMessage(Rental rental) {
         return "\n         id: " + rental.getId()
                 + "\n"
@@ -139,17 +151,5 @@ public class RentalServiceImpl implements RentalService {
                 + "\n 3. Period:"
                 + "\n         rental date: " + rental.getRentalDate()
                 + "\n         return date: " + rental.getReturnDate() + "\n";
-    }
-
-    @Scheduled(cron = "0 0 9 * * *")
-    protected void checkOverdueRentals() {
-        List<Rental> overdueRentals = rentalRepository.findOverdueRentals(LocalDate.now());
-        if (!overdueRentals.isEmpty()) {
-            overdueRentals.forEach(rental -> notificationService
-                    .sendNotification(OVERDUE_RENTAL_MESSAGE
-                            + buildNotificationMessage(rental)));
-        } else {
-            notificationService.sendNotification(NO_OVERDUE_MESSAGE);
-        }
     }
 }
